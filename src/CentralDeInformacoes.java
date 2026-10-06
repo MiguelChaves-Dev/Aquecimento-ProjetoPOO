@@ -4,7 +4,7 @@ public class CentralDeInformacoes {
 
     public boolean adicionarJogador(Jogador j) {
         for(int i = 0; i < jogadores.size();i++) {
-            if (jogadores.get(i).equals(j.getCPF()) || jogadores.get(i).equals(j.getEmail())) {
+            if (jogadores.get(i).getCPF().equals(j.getCPF()) || jogadores.get(i).getEmail().equals(j.getEmail())) {
                 return false;
             }
         }

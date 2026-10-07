@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
@@ -9,6 +10,9 @@ public class Main {
             System.out.print("1-Novo Jogador" +
                     "\n2-Listar todos os Jogadores" +
                     "\n3-Exibir Informações de um Jogador Específico" +
+                    "\n4-Salvar Palavras a partir de um arquivo CSV"+
+                    "\n5-Listar todas as Palavras salvas na Central"+
+                    "\n6-Cadastrar Palavra manualmente" +
                     "\nS-Sair"+
                     "\nOpção:");
             String op = input.nextLine();
@@ -26,6 +30,10 @@ public class Main {
                     }
                     System.out.print("Insira o CPF do Jogador: ");
                     String cpf =  input.nextLine();
+                    if (cpf.length() != 11){
+                        System.out.println("CPF inválido! (Tamanho errado!)");
+                        break;
+                    }
                     System.out.print("Insira o Email do Jogador: ");
                     String email = input.nextLine();
                     Jogador novoJogador = new Jogador(nome, sexoJogador, cpf, email);
@@ -59,6 +67,69 @@ public class Main {
                     }
                     if (!encontrado){
                         System.out.println("Jogador não encontrado!");
+                    }
+                    break;
+                case "4":
+                    System.out.print("Insira o nome do arquivo CSV: ");
+                    String nomeArquivo = input.nextLine();
+                    ArrayList<Palavra> extraidas = ExtratorPalavrasCSV.extrairPalavras(nomeArquivo);
+                    if (extraidas == null){
+                        System.out.println("Arquivo inválido ou fora do formato esperado!");
+                    } else {
+                        int adicionadas = 0;
+                        for (Palavra item : extraidas){
+                            if (central.adicionarPalavra(item)){
+                                adicionadas++;
+                            }
+                        }
+                        persistencia.salvarCentral(central);
+                        System.out.println(adicionadas + " palavra(s) salva(s)."
+                                + (extraidas.size() - adicionadas) + " ignorada(s) por já existirem.");
+                    }
+                    break;
+                case "5":
+                    if(central.getPalavras().isEmpty()){
+                        System.out.println("Nenhuma palavra salva na central.");
+                    } else {
+                        for (Palavra item : central.getPalavras()){
+                            System.out.println(item);
+                        }
+                    }
+                    break;
+                case "6":
+                    System.out.print("Insira a Palavra: ");
+                    String palavra = input.nextLine();
+                    System.out.print("Insira uma dica relacionada a esta palavra: ");
+                    String dica = input.nextLine();
+                    System.out.print("Insira a dificuldade dessa palavra " +
+                            "\n0-Fácil" +
+                            "\n1-Médio" +
+                            "\n2-Difícil: ");
+                    int dificuldade;
+                    try{
+                        dificuldade = Integer.valueOf(input.nextLine().trim());
+                    } catch (NumberFormatException e) {
+                        System.out.println("Dificuldade Inválida!");
+                        break;
+                    }
+
+                    Dificuldade dificuldadePalavra;
+                    if (dificuldade == 0){
+                        dificuldadePalavra = Dificuldade.FACIL;
+                    } else if (dificuldade == 1){
+                        dificuldadePalavra = Dificuldade.MEDIO;
+                    } else if(dificuldade == 2) {
+                        dificuldadePalavra = Dificuldade.DIFICIL;
+                    } else {
+                        System.out.println("Dificuldade Inválida!");
+                        break;
+                    }
+                    Palavra p = new Palavra(palavra, dica, dificuldadePalavra);
+                    if (central.adicionarPalavra(p)){
+                        persistencia.salvarCentral(central);
+                        System.out.println("Palavra adicionada com sucesso!");
+                    } else {
+                        System.out.println("Palavra repetida!");
                     }
                     break;
                 case "S":

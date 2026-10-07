@@ -11,7 +11,9 @@ public class Persistencia {
         xstream.allowTypes (new Class[] {
                 CentralDeInformacoes.class,
                 Jogador.class,
-                Sexo.class
+                Sexo.class,
+                Palavra.class,
+                Dificuldade.class
         });
     }
     public void salvarCentral(CentralDeInformacoes central){

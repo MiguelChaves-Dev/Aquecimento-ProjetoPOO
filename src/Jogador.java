@@ -7,9 +7,7 @@ public class Jogador {
     public Jogador(String no, Sexo sex, String cpf, String em) {
         nome = no;
         sexo = sex;
-        if (cpf.length() == 11) {
-            CPF = cpf;
-        }
+        CPF = cpf;
         email = em;
     }
 

@@ -13,6 +13,8 @@ public class Main {
                     "\n4-Salvar Palavras a partir de um arquivo CSV"+
                     "\n5-Listar todas as Palavras salvas na Central"+
                     "\n6-Cadastrar Palavra manualmente" +
+                    "\n7-Gerar relatorio em PDF" +
+                    "\n8-Enviar mensagem para todos os jogadores" +
                     "\nS-Sair"+
                     "\nOpção:");
             String op = input.nextLine();
@@ -132,6 +134,20 @@ public class Main {
                         System.out.println("Palavra repetida!");
                     }
                     break;
+                case "7":
+                    GeradorDeRelatorios.gerarRelatorio(central);
+                    break;
+                case "8":
+                    System.out.print("Assunto: ");
+                    String assunto = input.nextLine();
+                    System.out.print("Mensagem: ");
+                    String mensagem = input.nextLine();
+                 
+                    for (Jogador j : central.getTodosJogadores()) {
+                        Mensageiro.enviarMensagem(j.getEmail(), assunto, mensagem);
+                    }
+                    break;
+                 
                 case "S":
                     System.out.println("Encerrando...");
                     continua = true;
